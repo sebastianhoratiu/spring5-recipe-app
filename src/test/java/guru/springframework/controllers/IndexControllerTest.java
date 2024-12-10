@@ -2,17 +2,19 @@ package guru.springframework.controllers;
 
 import guru.springframework.domain.*;
 import guru.springframework.services.*;
-import junit.framework.TestCase;
 import org.junit.*;
 import org.mockito.*;
+import org.springframework.test.web.servlet.*;
+import org.springframework.test.web.servlet.setup.*;
 import org.springframework.ui.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class IndexControllerTest {
 
@@ -29,6 +31,16 @@ public class IndexControllerTest {
 
         MockitoAnnotations.initMocks(this);
         indexController = new IndexController(recipeService);
+    }
+
+    @Test
+    public void testMockMvc() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"));
+
     }
 
     @Test
